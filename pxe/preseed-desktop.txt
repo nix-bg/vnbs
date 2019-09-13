@@ -1,0 +1,98 @@
+# Locale
+d-i debian-installer/locale string en_US.UTF-8
+d-i keyboard-configuration/xkb-keymap select us
+d-i localechooser/supported-locales multiselect en_US.UTF-8, bg_BG.UTF-8
+
+# Network
+d-i netcfg/choose_interface select auto
+
+# Mirror
+d-i mirror/country string manual
+d-i mirror/http/hostname string bg.archive.ubuntu.com
+d-i mirror/http/directory string /ubuntu
+d-i mirror/http/proxy string
+
+# User
+# Create user test with password test
+# The password is generated with: mkpasswd -m sha-512
+d-i passwd/root-login boolean false
+d-i passwd/make-user boolean true
+d-i passwd/user-fullname string test
+d-i passwd/username string test
+d-i passwd/user-password-crypted password $6$VZAnEV31$UWr58bajMTHUifv5v6iXCuM9BH/DPTt5uI4BhBgW/InwTKq8QWf8gGd9lqH5pLfFk41fajP55LtsUWGwtNrJP1
+
+# Clock
+d-i clock-setup/utc boolean true
+d-i clock-setup/ntp boolean true
+d-i time/zone string Europe/Sofia
+
+# Partitioning
+# ext4, 4GB swap, all remaining space on /
+d-i partman-auto/disk string /dev/sda
+d-i partman-md/device_remove_md boolean true
+d-i partman-lvm/device_remove_lvm boolean true
+d-i partman-lvm/device_remove_lvm_span boolean true
+d-i partman-auto/purge_lvm_from_device boolean true
+
+d-i partman-auto/method string regular
+d-i partman-auto/expert_recipe string            \
+    boot-root ::                                 \
+        3096 1 3096 linux-swap                   \
+            $primary{ }                          \
+            method{ swap } format{ }             \
+        .                                        \
+        7000 1 -1 ext4                           \
+            $primary{ }                          \
+            $bootable{ }                         \
+            method{ format } format{ }           \
+            use_filesystem{ } filesystem{ ext4 } \
+            mountpoint{ / }                      \
+        .                                        \
+# If a partition confirmation dialog is desired, the four lines below can be
+# commented out
+#d-i partman-partitioning/confirm_write_new_label boolean true
+#d-i partman/choose_partition select finish
+#d-i partman/confirm boolean true
+#d-i partman/confirm_nooverwrite boolean true
+
+# Apt setup
+d-i apt-setup/services-select multiselect security, updates
+apt-mirror-setup apt-setup/restricted boolean true
+apt-mirror-setup apt-setup/universe boolean true
+apt-mirror-setup apt-setup/multiverse boolean false
+apt-mirror-setup apt-setup/backports boolean false
+apt-mirror-setup apt-setup/partner boolean false
+apt-setup-udeb apt-setup/enable-source-repositories boolean false
+
+# Package selection
+# Here only the bg language pack is selected because if en is also selected,
+# all english locales (en_AU, en_CA, etc.) will be installed, which is
+# unnecessary
+tasksel tasksel/first multiselect standard, openssh-server, xubuntu-desktop
+d-i pkgsel/language-packs multiselect bg
+d-i pkgsel/upgrade select safe-upgrade
+d-i pkgsel/update-policy select unattended-upgrades
+
+# Boot loader
+d-i grub-installer/only_debian boolean true
+d-i grub-installer/with_other_os boolean true
+
+# Custom commands before reboot
+# in-target deluser --remove-all-files test;
+d-i preseed/late_command string in-target apt -y install curl git software-properties-common;                                     \
+                                in-target apt-add-repository -y ppa:ansible/ansible;                                              \
+                                in-target apt update;                                                                             \
+                                in-target apt -y install ansible;                                                                 \
+                                in-target git clone https://github.com/nix-bg/vnbs.git /tmp/vnbs;                                 \
+                                in-target bash -c 'echo -e "[clients]\nlocalhost" > /tmp/hosts.ini';                              \
+                                in-target ansible-playbook -c local -i /tmp/hosts.ini /tmp/vnbs/ansible/playbooks/superusers.yml;  \
+                                in-target ansible-playbook -c local -i /tmp/hosts.ini /tmp/vnbs/ansible/playbooks/client-init.yml;
+
+
+# Finishing up the installation
+d-i finish-install/reboot_in_progress note
+d-i finish-install/keep-consoles boolean false
+d-i cdrom-detect/eject boolean true
+d-i debian-installer/exit/halt boolean false
+d-i debian-installer/exit/poweroff boolean false
+

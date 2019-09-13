@@ -1,0 +1,11 @@
+#!/bin/bash -e
+
+/bin/sleep 10
+
+for pkg in                               \
+    'name=viber-unofficial classic=true' \
+    'name=skype classic=true'            \
+    'name=telegram-desktop'
+do
+    /usr/bin/ansible localhost -m snap -a $pkg &>/dev/null
+done

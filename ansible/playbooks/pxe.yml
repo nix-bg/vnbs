@@ -1,0 +1,26 @@
+- hosts: pxe_servers
+  become: true
+
+  tasks:
+  - name: Install tftpd-hpa
+    apt:
+      name: tftpd-hpa
+      state: present
+      update_cache: true
+
+  - name: Create Ubuntu 18.04 PXE directory
+    file:
+      path: /var/lib/tftpboot/bionic/
+      state: directory
+
+  - name: Download Ubuntu 18.04 PXE image
+    unarchive:
+      src: http://archive.ubuntu.com/ubuntu/dists/bionic-updates/main/installer-amd64/current/images/netboot/netboot.tar.gz
+      remote_src: yes
+      dest: /var/lib/tftpboot/bionic/
+      creates: /var/lib/tftpboot/bionic/pxelinux.0
+
+  - name: Copy Ubuntu 18.04 txt.cfg
+    template:
+      src: templates/bionic-txt.cfg.j2
+      dest: /var/lib/tftpboot/bionic/ubuntu-installer/amd64/boot-screens/txt.cfg

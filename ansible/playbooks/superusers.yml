@@ -1,0 +1,28 @@
+- hosts: clients
+  become: true
+
+  tasks:
+    - name: Create /usr/home
+      file:
+        path: /usr/home
+        state: directory
+        owner: root
+        group: root
+        mode: 0755
+
+    - name: Create superusers group
+      group:
+        name: superusers
+        state: present
+
+    - name: Create /etc/sudoers.d/superusers
+      copy:
+        src: sudo_superusers
+        dest: /etc/sudoers.d/superusers
+        owner: root
+        group: root
+        mode: 0440
+
+    - include: superuser.yml user={{ item }}
+      with_items:
+        - "ardavast"

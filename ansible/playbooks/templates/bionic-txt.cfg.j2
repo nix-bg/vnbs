@@ -1,0 +1,21 @@
+default autodesktop
+label autodesktop
+	menu label ^Autoinstall Desktop
+	menu default
+	kernel ubuntu-installer/amd64/linux
+	append vga=788 initrd=ubuntu-installer/amd64/initrd.gz auto locale=en_US.UTF-8 keyboard-configuration/layoutcode=us url={{ preseed_desktop }} --- quiet 
+
+label autoserver
+	menu label ^Autoinstall Server
+	kernel ubuntu-installer/amd64/linux
+	append vga=788 initrd=ubuntu-installer/amd64/initrd.gz auto locale=en_US.UTF-8 keyboard-configuration/layoutcode=us url={{ preseed_server }} --- quiet 
+
+label install
+	menu label ^Install
+	kernel ubuntu-installer/amd64/linux
+	append vga=788 initrd=ubuntu-installer/amd64/initrd.gz --- quiet 
+
+label cli
+	menu label ^Command-line install
+	kernel ubuntu-installer/amd64/linux
+	append tasks=standard pkgsel/language-pack-patterns= pkgsel/install-language-support=false vga=788 initrd=ubuntu-installer/amd64/initrd.gz --- quiet 

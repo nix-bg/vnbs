@@ -1,0 +1,13 @@
+option domain-name-servers {{ dhcp_dns }};
+
+default-lease-time 600;
+max-lease-time 7200;
+
+ddns-update-style none;
+
+subnet {{ dhcp_net }} netmask {{ dhcp_mask }} {
+  range {{ dhcp_range }};
+  option routers {{ dhcp_gw }};
+  next-server {{ dhcp_pxeserver }};
+  filename "{{ dhcp_pxefile }}";
+}

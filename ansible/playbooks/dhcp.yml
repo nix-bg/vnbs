@@ -1,0 +1,24 @@
+- hosts: dhcp_servers
+  become: true
+
+  tasks:
+  - name: Install isc-dhcp-server
+    apt:
+      name: isc-dhcp-server
+      state: present
+      update_cache: true
+
+  - name: Configure isc-dhcp-server
+    template:
+      src: templates/dhcpd.conf.j2
+      dest: /etc/dhcp/dhcpd.conf
+
+  - name: Configure isc-dhcp-server
+    template:
+      src: templates/dhcpd_default.j2
+      dest: /etc/default/isc-dhcp-server
+
+  - name: Restart isc-dhcp-server
+    service:
+      name: isc-dhcp-server
+      state: restarted

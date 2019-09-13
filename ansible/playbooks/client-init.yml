@@ -1,0 +1,285 @@
+- hosts: clients
+  become: true
+
+  tasks:
+  - name: Remove packages
+    apt:
+      name: [
+        # apport
+        'apport',
+        'apport-gtk',
+        'apport-symptoms',
+        'python3-apport',
+
+        # update-manager
+        'update-manager',
+        'update-manager-core',
+        'update-notifier',
+        'update-notifier-common',
+
+        # xfce plugins
+        'xfce4-cpugraph-plugin',
+        'xfce4-dict',
+        'xfce4-mailwatch-plugin',
+        'xfce4-netload-plugin',
+        'xfce4-notes-plugin',
+        'xfce4-places-plugin',
+        'xfce4-power-manager',
+        'xfce4-power-manager-data',
+        'xfce4-power-manager-plugins',
+        'xfce4-quicklauncher-plugin',
+        'xfce4-systemload-plugin',
+        'xfce4-verve-plugin',
+        'xfce4-weather-plugin'
+      ]
+      state: absent
+
+  - name: Remove Bluetooth packages
+    apt:
+      name: [
+        'blueman',
+        'bluez',
+        'bluez-cups',
+        'bluez-obexd',
+        'pulseaudio-module-bluetooth'
+      ]
+      state: absent
+
+  - name: Remove Bluetooth directories
+    file:
+      path: [
+        "/var/lib/bluetooth",
+        "/var/lib/blueman"
+      ]
+      state: absent
+
+  - name: Install packages
+    apt:
+      name: [
+        # system
+        'ifupdown',
+        'htop',
+        'git',
+        'tmux',
+        'vim',
+        'xfce4-xkb-plugin',
+        'openssh-server',
+        'conky',
+
+        # games
+        'wine-stable',
+        'winetricks',
+
+        # internet
+        'firefox',
+        'thunderbird',
+
+        # office
+        'libreoffice',
+        'atril',
+
+        # media
+        'vlc',
+        'pinta',
+        'tuxpaint',
+
+        # other
+        'sweethome3d',
+        'sweethome3d-furniture',
+        'sweethome3d-furniture-editor',
+        'sweethome3d-textures-editor',
+        'blender'
+      ]
+      state: present
+      update_cache: true
+
+  # Install Chrome
+  - name: Check if Google Chrome is installed
+    shell: set -o pipefail dpkg-query -W -f='${Status}' google-chrome-stable | grep '^install ok installed$'
+    register: chrome_installed
+    failed_when: no
+    changed_when: no
+
+  - name: Download Google Chrome
+    get_url:
+      url: https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+      dest: /tmp/google-chrome-stable_current_amd64.deb
+    when: chrome_installed.rc != 0
+
+  - name: Install Google Chrome
+    shell: /usr/bin/dpkg -i /tmp/google-chrome-stable_current_amd64.deb || apt -y install -f
+    when: chrome_installed.rc != 0
+
+  # Install Teamviewer
+  - name: Check if Teamviewer is installed
+    shell: set -o pipefail dpkg-query -W -f='${Status}' teamviewer | grep '^install ok installed$'
+    register: teamviewer_installed
+    failed_when: no
+    changed_when: no
+
+  - name: Download Teamviewer
+    get_url:
+      url: https://download.teamviewer.com/download/linux/teamviewer_amd64.deb
+      dest: /tmp/teamviewer_amd64.deb
+    when: teamviewer_installed.rc != 0
+
+  - name: Install Teamviewer
+    shell: /usr/bin/dpkg -i /tmp/teamviewer_amd64.deb || apt -y install -f
+    when: teamviewer_installed.rc != 0
+
+  # Install Viber, Skype and Telegram using snap.
+  # However snaps can't be installed during preseed - so use a
+  # self-destructible /etc/rc.local file to install them on first boot.
+  - name: Check if /vagrant exists
+    stat:
+      path: /vagrant
+    register: vagrant
+
+  - name: Check if /snap/bin/telegrom-desktop exists
+    stat:
+      path: /snap/bin/telegrom-desktop
+    register: telegram
+
+  - name: Copy /etc/rc.local
+    copy:
+      src: rc.local
+      dest: /etc/rc.local
+      owner: root
+      group: root
+      mode: 0755
+    when: not (telegram.stat.exists or vagrant.stat.exists)
+
+  - name: Install Viber
+    snap:
+      name: viber-unofficial
+    when: telegram.stat.exists or vagrant.stat.exists
+
+  - name: Install Skype
+    snap:
+      name: skype
+    when: telegram.stat.exists or vagrant.stat.exists
+
+  - name: Install Telegram
+    snap:
+      name: telegram-desktop
+    when: telegram.stat.exists or vagrant.stat.exists
+
+  # XFCE settings
+  - name: Remove xfce session from the login screen
+    file:
+      path: /usr/share/xsessions/xfce.desktop
+      state: absent
+
+  - name: Copy /etc/xdg/xfce4/xinitrc
+    copy:
+      src: xinitrc
+      dest: /etc/xdg/xfce4/xinitrc
+      owner: root
+      group: root
+      mode: 0755
+
+  - name: Create /etc/xdg/xfce4/kiosk/
+    file:
+      path: /etc/xdg/xfce4/kiosk/
+      state: directory
+      owner: root
+      group: root
+      mode: 0755
+
+  - name: Create /etc/xdg/xfce4/kiosk/kioskrc
+    copy:
+      src: kioskrc
+      dest: /etc/xdg/xfce4/kiosk/kioskrc
+      owner: root
+      group: root
+      mode: 0755
+
+  - name: Create /etc/skel hier
+    file:
+      path: /etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml
+      state: directory
+      owner: root
+      group: root
+      mode: 0755
+
+  - name: Create autostart with 0555 permissions
+    file:
+      path: /etc/skel/.config/autostart
+      state: directory
+      owner: root
+      group: root
+      mode: 0555
+
+  - name: Create a starter for a shell script to be started on GUI login
+    copy:
+      src: start.desktop
+      dest: /etc/skel/.config/autostart/start.desktop
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: Create shell script to be started on GUI login
+    copy:
+      src: start.sh
+      dest: /usr/local/bin/start.sh
+      owner: root
+      group: root
+      mode: 0755
+
+  - name: Copy immutable XFCE configuration files
+    copy:
+      src: "{{ item }}"
+      dest: "/etc/xdg/xdg-xubuntu/xfce4/xfconf/xfce-perchannel-xml/{{ item }}"
+      owner: root
+      group: root
+      mode: 0644
+    with_items:
+      - 'xfce4-desktop.xml'
+      - 'xfce4-panel.xml'
+      - 'xfce4-power-manager.xml'
+      - 'keyboard-layout.xml'
+
+  # chmod 0750 all settings tools except display and mouse
+  - name: Forbid execution of xfce configuration utilities
+    file:
+      path: [
+        "/usr/bin/xfce4-accessibility-settings mode=0750",
+        "/usr/bin/software-properties-gtk mode=0750",
+        "/usr/bin/xfce4-appearance-settings mode=0750",
+        "/usr/bin/xfdesktop-settings mode=0750",
+        "/usr/lib/icedtea-web/bin/itweb-settings mode=0750",
+        "/usr/bin/xfce4-keyboard-settings mode=0750",
+        "/usr/bin/xfce4-mime-settings mode=0750",
+        "/usr/bin/nm-connection-editor mode=0750",
+        "/usr/bin/xfce4-notifyd-config mode=0750",
+        "/usr/bin/thunar-volman-settings mode=0750",
+        "/usr/bin/xfce4-session-settings mode=0750",
+        "/usr/bin/xfce4-settings-editor mode=0750",
+        "/usr/bin/tuxpaint-config mode=0750",
+        "/usr/bin/xfwm4-settings mode=0750",
+        "/usr/bin/xfwm4-tweaks-settings mode=0750",
+        "/usr/bin/xfwm4-workspace-settings mode=0750"
+      ]
+      mode: 0750
+
+  # Network configuration
+  - name: Copy /etc/network/interfaces
+    copy:
+      src: interfaces
+      dest: /etc/network/interfaces
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: Disable predictable network interface names
+    copy:
+      src: grub_default
+      dest: /etc/default/grub
+      owner: root
+      group: root
+      mode: 0644
+    register: grub
+
+  - name: Disable predictable network interface names
+    command: /usr/sbin/update-grub
+    when: grub.changed

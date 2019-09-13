@@ -1,0 +1,27 @@
+- hosts: routers
+  become: true
+
+  tasks:
+  - name: Enable IPv4 routing
+    sysctl:
+      name: net.ipv4.ip_forward
+      value: '1'
+      sysctl_set: yes
+      state: present
+      reload: yes
+
+  - name: Install iptables-persistent
+    apt:
+      name: iptables-persistent
+      state: present
+      update_cache: true
+
+  - name: Install iptables IPv4 rules
+    template:
+      src: rules.v4.j2
+      dest: /etc/iptables/rules.v4
+
+  - name: Load iptables rules
+    service:
+      name: netfilter-persistent
+      state: restarted

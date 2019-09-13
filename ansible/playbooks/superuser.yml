@@ -1,0 +1,20 @@
+- user:
+    name: "{{ user }}"
+    groups: superusers, adm, cdrom, sudo, dip, plugdev, lpadmin, sambashare
+    append: true
+    home: "/usr/home/{{ user }}"
+    shell: /bin/bash
+
+- file:
+    path: "/usr/home/{{ user }}/.ssh"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0700
+
+- copy:
+    src: "sshkeys/{{ user }}"
+    dest: "/usr/home/{{ user }}/.ssh/authorized_keys"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0600

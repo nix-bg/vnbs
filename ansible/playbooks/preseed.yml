@@ -1,0 +1,19 @@
+- hosts: preseed_servers
+  become: true
+
+  tasks:
+  - name: Install nginx
+    apt:
+      name: nginx
+      state: present
+      update_cache: true
+
+  - name: Copy preseed-desktop.txt
+    copy:
+      src: preseed-desktop.txt
+      dest: /var/www/html/preseed-desktop.txt
+
+  - name: Copy preseed-server.txt
+    copy:
+      src: preseed-server.txt
+      dest: /var/www/html/preseed-server.txt
