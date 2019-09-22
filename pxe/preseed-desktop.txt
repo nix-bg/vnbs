@@ -87,8 +87,9 @@ d-i preseed/late_command string in-target apt -y install curl git software-prope
                                 in-target bash -c 'echo -e "[clients]\nlocalhost" > /tmp/hosts.ini';                              \
                                 in-target ansible-playbook -c local -i /tmp/hosts.ini /tmp/vnbs/ansible/playbooks/superusers.yml;  \
                                 in-target ansible-playbook -c local -i /tmp/hosts.ini /tmp/vnbs/ansible/playbooks/client-init.yml;	\
-				in-target ansible-playbook -c local -i /tmp/hosts.ini /tmp/zsl/ansible/playbooks/client-games.yml;
-
+				in-target ansible-playbook -c local -i /tmp/hosts.ini /tmp/vnbs/ansible/playbooks/client-games.yml;	\
+				in-target /tmp/vnbs/games/./setup_cs.sh;	\
+				in-target /tmp/vnbs/games/./setup_starcraft.sh;
 
 # Finishing up the installation
 d-i finish-install/reboot_in_progress note
