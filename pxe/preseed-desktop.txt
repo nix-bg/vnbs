@@ -50,10 +50,10 @@ d-i partman-auto/expert_recipe string            \
         .                                        \
 # If a partition confirmation dialog is desired, the four lines below can be
 # commented out
-#d-i partman-partitioning/confirm_write_new_label boolean true
-#d-i partman/choose_partition select finish
-#d-i partman/confirm boolean true
-#d-i partman/confirm_nooverwrite boolean true
+d-i partman-partitioning/confirm_write_new_label boolean true
+d-i partman/choose_partition select finish
+d-i partman/confirm boolean true
+d-i partman/confirm_nooverwrite boolean true
 
 # Apt setup
 d-i apt-setup/services-select multiselect security, updates
@@ -86,7 +86,8 @@ d-i preseed/late_command string in-target apt -y install curl git software-prope
                                 in-target git clone https://github.com/nix-bg/vnbs.git /tmp/vnbs;                                 \
                                 in-target bash -c 'echo -e "[clients]\nlocalhost" > /tmp/hosts.ini';                              \
                                 in-target ansible-playbook -c local -i /tmp/hosts.ini /tmp/vnbs/ansible/playbooks/superusers.yml;  \
-                                in-target ansible-playbook -c local -i /tmp/hosts.ini /tmp/vnbs/ansible/playbooks/client-init.yml;
+                                in-target ansible-playbook -c local -i /tmp/hosts.ini /tmp/vnbs/ansible/playbooks/client-init.yml;	\
+				in-target ansible-playbook -c local -i /tmp/hosts.ini /tmp/zsl/ansible/playbooks/client-games.yml;
 
 
 # Finishing up the installation
