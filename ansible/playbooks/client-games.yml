@@ -1,0 +1,10 @@
+- hosts: clients
+  become: true
+
+  tasks:
+  - name: Install packages
+    apt:
+      name: [
+        # games
+        'wesnoth',
+        'extremetuxracer'
