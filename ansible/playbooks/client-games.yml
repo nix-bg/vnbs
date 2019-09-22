@@ -7,5 +7,16 @@
       name: [
         # games
         'wesnoth',
-        'extremetuxracer'
+        'extremetuxracer',
+        'btanks',
+        'gamine',
+        'gnome-chess',
+        'neverputt',
+        'bovo',
+        'gcompris',
+        'kapman',
+        'ktuberling',
+        'lskat',
+        'supertux',
+        'teeworlds'
       ]
