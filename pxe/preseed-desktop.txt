@@ -82,11 +82,11 @@ d-i grub-installer/with_other_os boolean true
 d-i preseed/late_command string in-target apt -y install curl git software-properties-common;                                     \
                                 in-target apt-add-repository -y ppa:ansible/ansible;                                              \
                                 in-target apt update;                                                                             \
-                                in-target apt -y install ansible;                                                                 \
-                                in-target git clone https://github.com/ardavast/zsl.git /tmp/zsl;                                 \
+                                in-target apt -y install ansible aptitude;                                                                 \
+                                in-target git clone https://github.com/nix-bg/vnbs.git /tmp/vnbs;                                 \
                                 in-target bash -c 'echo -e "[clients]\nlocalhost" > /tmp/hosts.ini';                              \
-                                in-target ansible-playbook -c local -i /tmp/hosts.ini /tmp/zsl/ansible/playbooks/superusers.yml;  \
-                                in-target ansible-playbook -c local -i /tmp/hosts.ini /tmp/zsl/ansible/playbooks/client-init.yml;
+                                in-target ansible-playbook -c local -i /tmp/hosts.ini /tmp/vnbs/ansible/playbooks/superusers.yml;  \
+                                in-target ansible-playbook -c local -i /tmp/hosts.ini /tmp/vnbs/ansible/playbooks/client-init.yml;
 
 
 # Finishing up the installation
