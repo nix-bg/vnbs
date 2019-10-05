@@ -240,27 +240,27 @@
       - 'keyboard-layout.xml'
 
   # chmod 0750 all settings tools except display and mouse
-#  - name: Forbid execution of xfce configuration utilities
-#    file:
-#      path: [
-#        "/usr/bin/xfce4-accessibility-settings mode=0750",
-#        "/usr/bin/software-properties-gtk mode=0750",
-#        "/usr/bin/xfce4-appearance-settings mode=0750",
-#        "/usr/bin/xfdesktop-settings mode=0750",
-#        "/usr/lib/icedtea-web/bin/itweb-settings mode=0750",
-#        "/usr/bin/xfce4-keyboard-settings mode=0750",
-#        "/usr/bin/xfce4-mime-settings mode=0750",
-#        "/usr/bin/nm-connection-editor mode=0750",
-#        "/usr/bin/xfce4-notifyd-config mode=0750",
-#        "/usr/bin/thunar-volman-settings mode=0750",
-#        "/usr/bin/xfce4-session-settings mode=0750",
-#        "/usr/bin/xfce4-settings-editor mode=0750",
-#        "/usr/bin/tuxpaint-config mode=0750",
-#        "/usr/bin/xfwm4-settings mode=0750",
-#        "/usr/bin/xfwm4-tweaks-settings mode=0750",
-#        "/usr/bin/xfwm4-workspace-settings mode=0750"
-#      ]
-#      mode: 0750
+  - name: Forbid execution of xfce configuration utilities
+    file:
+      path: "{{ item }}"
+      mode: 0750
+    with_items:
+      - /usr/bin/xfce4-accessibility-settings
+      - /usr/bin/software-properties-gtk
+      - /usr/bin/xfce4-appearance-settings
+      - /usr/bin/xfdesktop-settings
+      - /usr/lib/icedtea-web/bin/itweb-settings
+      - /usr/bin/xfce4-keyboard-settings
+      - /usr/bin/xfce4-mime-settings
+      - /usr/bin/nm-connection-editor
+      - /usr/bin/xfce4-notifyd-config
+      - /usr/bin/thunar-volman-settings
+      - /usr/bin/xfce4-session-settings
+      - /usr/bin/xfce4-settings-editor
+      - /usr/bin/tuxpaint-config
+      - /usr/bin/xfwm4-settings
+      - /usr/bin/xfwm4-tweaks-settings
+      - /usr/bin/xfwm4-workspace-settings
 
   # Network configuration
   - name: Copy /etc/network/interfaces

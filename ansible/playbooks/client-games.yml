@@ -2,7 +2,7 @@
   become: true
 
   tasks:
-  - name: Install packages
+  - name: Install native games
     apt:
       name: [
         # games
@@ -21,3 +21,41 @@
         'teeworlds',
         'games-tetris'
       ]
+  - name: Install win games
+    block:
+
+      - name: Install starcraft
+        unarchive:
+        src: http://10.200.11.2:/games/starcraft.tar.gz
+        dest: /home/test/.wine/drive_c/games/
+        remote_src: yes
+
+      - name: Download shortcut for starcraft
+        get_url:
+          url: http://10.200.11.2:/games/starcraft.desktop
+          dest: /home/test/Desktop/Games/
+          owner: test
+          group: test         
+          mode: '0550'
+
+      - name: Install cs
+        unarchive:
+        src: http://10.200.11.2:/games/cs.tar.gz
+        dest: /home/test/.wine/drive_c/games/
+        remote_src: yes
+
+      - name: Download shortcut for cs
+        get_url:
+          url: http://10.200.11.2:/games/cs.desktop
+          dest: /home/test/Desktop/Games/
+          owner: test
+          group: test
+          mode: '0550'
+
+      - name: fix permissions in games dir
+        file:
+        path: /home/test/.wine/drive_c/games/
+        owner: test
+        group: test
+        recurse: yes
+
