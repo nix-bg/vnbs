@@ -24,6 +24,22 @@
   - name: Install win games
     block:
 
+      - name: Create games directory under .wine
+        file:
+          path: /home/test/.wine/drive_c/games/
+          state: directory
+          owner: test
+          group: test
+          mode: '0755'
+
+      - name: Create games shortcut directory on Desktop
+        file:
+          path: /home/test/Desktop/Games/
+          state: directory
+          owner: test
+          group: test
+          mode: '0755'
+
       - name: Install starcraft
         unarchive:
         src: http://10.200.11.2:/games/starcraft.tar.gz
