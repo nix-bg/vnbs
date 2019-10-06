@@ -42,9 +42,26 @@
 
       - name: Install starcraft
         unarchive:
-        src: http://10.200.11.2:/games/starcraft.tar.gz
-        dest: /home/test/.wine/drive_c/games/
-        remote_src: yes
+          src: http://10.200.11.2:/games/starcraft.tar.gz
+          dest: /home/test/.wine/drive_c/games/
+          owner: test
+          group: test
+          remote_src: yes
+
+      - name: Change ownership of wine directory
+        file:
+          path: /home/test/.wine/
+          state: directory
+          force: yes
+          recurse: yes
+          owner: test
+          group: test
+      
+      - name: Install starcraft reg
+        shell: wine start regedit.exe /home/test/.wine/drive_c/games/starcraft/starcraft.reg
+        become_user: test
+        args:
+          chdir: /home/test/.wine/drive_c/games/
 
       - name: Download shortcut for starcraft
         get_url:
@@ -56,9 +73,11 @@
 
       - name: Install cs
         unarchive:
-        src: http://10.200.11.2:/games/cs.tar.gz
-        dest: /home/test/.wine/drive_c/games/
-        remote_src: yes
+          src: http://10.200.11.2:/games/cs.tar.gz
+          dest: /home/test/.wine/drive_c/games/
+          owner: test
+          group: test
+          remote_src: yes
 
       - name: Download shortcut for cs
         get_url:
@@ -68,10 +87,18 @@
           group: test
           mode: '0550'
 
+      - name: fix permissions in shortcuts dir
+        file:
+          path: /home/test/Desktop/Games/
+          owner: test
+          group: test
+          recurse: yes
+
       - name: fix permissions in games dir
         file:
-        path: /home/test/.wine/drive_c/games/
-        owner: test
-        group: test
-        recurse: yes
+          path: /home/test/.wine/
+          owner: test
+          group: test
+          recurse: yes
+
 
