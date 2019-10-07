@@ -52,7 +52,6 @@
         file:
           path: /home/test/.wine/
           state: directory
-          force: yes
           recurse: yes
           owner: test
           group: test
@@ -90,6 +89,7 @@
       - name: fix permissions in shortcuts dir
         file:
           path: /home/test/Desktop/Games/
+          state: directory
           owner: test
           group: test
           recurse: yes
@@ -97,6 +97,7 @@
       - name: fix permissions in games dir
         file:
           path: /home/test/.wine/
+          state: directory
           owner: test
           group: test
           recurse: yes
