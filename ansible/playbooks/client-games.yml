@@ -1,5 +1,4 @@
 - hosts: clients
-  become: true
 
   tasks:
   - name: Install native games
@@ -48,19 +47,17 @@
           group: test
           remote_src: yes
 
-      - name: Change ownership of wine directory
-        file:
-          path: /home/test/.wine/
-          state: directory
-          recurse: yes
-          owner: test
-          group: test
+          #      - name: Change ownership of wine directory
+          #        file:
+          #          path: /home/test/.wine/drive_c/games
+          #          state: directory
+          #          recurse: yes
+          #          owner: test
+          #          group: test
       
       - name: Install starcraft reg
         shell: wine start regedit.exe /home/test/.wine/drive_c/games/starcraft/starcraft.reg
         become_user: test
-        args:
-          chdir: /home/test/.wine/drive_c/games/
 
       - name: Download shortcut for starcraft
         get_url:
@@ -86,20 +83,20 @@
           group: test
           mode: '0550'
 
-      - name: fix permissions in shortcuts dir
-        file:
-          path: /home/test/Desktop/Games/
-          state: directory
-          owner: test
-          group: test
-          recurse: yes
-
-      - name: fix permissions in games dir
-        file:
-          path: /home/test/.wine/
-          state: directory
-          owner: test
-          group: test
-          recurse: yes
+          #      - name: fix permissions in shortcuts dir
+          #        file:
+          #          path: /home/test/Desktop/Games/
+          #          state: directory
+          #          owner: test
+          #          group: test
+          #          recurse: yes
+          #
+          #      - name: fix permissions in games dir
+          #        file:
+          #          path: /home/test/.wine/drive_c/games
+          #          state: directory
+          #          owner: test
+          #          group: test
+          #          recurse: yes
 
 
