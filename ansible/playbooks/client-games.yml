@@ -77,3 +77,11 @@
           owner: test
           group: test
           mode: '0550'
+### forbid test user to delete shortcuts
+      - name: Recursively change ownership of games shortcuts directory
+        file:
+          path: /home/test/Desktop/Games/
+          state: directory
+          recurse: yes
+          owner: root
+          group: root
