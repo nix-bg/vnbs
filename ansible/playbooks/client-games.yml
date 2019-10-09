@@ -1,7 +1,7 @@
 - hosts: clients
 
   tasks:
-  - name: Install native games
+  - name: Install native games and apps
     apt:
       name: [
         # games
@@ -18,11 +18,14 @@
         'lskat',
         'supertux',
         'teeworlds',
-        'games-tetris'
+        'games-tetris',
+        #apps
+        'kdenlive'
       ]
   - name: Install win games
     block:
 
+### create directory
       - name: Create games directory under .wine
         file:
           path: /home/test/.wine/drive_c/games/
@@ -38,7 +41,7 @@
           owner: test
           group: test
           mode: '0755'
-
+### install starcraft
       - name: Install starcraft
         unarchive:
           src: http://10.200.11.2:/games/starcraft.tar.gz
@@ -47,14 +50,6 @@
           group: test
           remote_src: yes
 
-          #      - name: Change ownership of wine directory
-          #        file:
-          #          path: /home/test/.wine/drive_c/games
-          #          state: directory
-          #          recurse: yes
-          #          owner: test
-          #          group: test
-      
       - name: Install starcraft reg
         shell: wine start regedit.exe /home/test/.wine/drive_c/games/starcraft/starcraft.reg
         become_user: test
@@ -66,7 +61,7 @@
           owner: test
           group: test         
           mode: '0550'
-
+### install cs 1.6
       - name: Install cs
         unarchive:
           src: http://10.200.11.2:/games/cs.tar.gz
@@ -82,21 +77,3 @@
           owner: test
           group: test
           mode: '0550'
-
-          #      - name: fix permissions in shortcuts dir
-          #        file:
-          #          path: /home/test/Desktop/Games/
-          #          state: directory
-          #          owner: test
-          #          group: test
-          #          recurse: yes
-          #
-          #      - name: fix permissions in games dir
-          #        file:
-          #          path: /home/test/.wine/drive_c/games
-          #          state: directory
-          #          owner: test
-          #          group: test
-          #          recurse: yes
-
-
