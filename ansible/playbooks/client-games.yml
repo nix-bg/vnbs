@@ -19,8 +19,27 @@
         'supertux',
         'teeworlds',
         'games-tetris',
+        'freeciv',
+        '0ad',
+        'opencity',
+        'openttd',
         #apps
-        'kdenlive'
+        'kdenlive',
+        'astrometry.net',
+        'kalzium',
+        'kbruch',
+        'kgeography',
+        'kig',
+        'kolourpaint',
+        'kruler',
+        'kstars',
+        'mpv',
+        'smplayer',
+        'timidity',
+        'xplanet',
+        'vlc',
+        #system
+        'osspd-pulseaudio'
       ]
   - name: Install win games
     block:
@@ -50,9 +69,9 @@
           group: test
           remote_src: yes
 
-      - name: Install starcraft reg
-        shell: wine start regedit.exe /home/test/.wine/drive_c/games/starcraft/starcraft.reg
-        become_user: test
+#      - name: Install starcraft reg
+#        shell: wine start regedit.exe /home/test/.wine/drive_c/games/starcraft/starcraft.reg
+#        become_user: test
 
       - name: Download shortcut for starcraft
         get_url:
@@ -60,7 +79,7 @@
           dest: /home/test/Desktop/Games/
           owner: test
           group: test         
-          mode: '0550'
+          mode: '0555'
 ### install cs 1.6
       - name: Install cs
         unarchive:
@@ -76,7 +95,7 @@
           dest: /home/test/Desktop/Games/
           owner: test
           group: test
-          mode: '0550'
+          mode: '0555'
 ### forbid test user to delete shortcuts
       - name: Recursively change ownership of games shortcuts directory
         file:
