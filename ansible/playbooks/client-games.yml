@@ -53,13 +53,13 @@
           group: test
           mode: '0755'
 
-      - name: Create games shortcut directory on Desktop
-        file:
-          path: /home/test/Desktop/Games/
-          state: directory
-          owner: test
-          group: test
-          mode: '0755'
+#      - name: Create games shortcut directory on Desktop
+#        file:
+#          path: /home/test/Desktop/Games/
+#          state: directory
+#          owner: test
+#          group: test
+#          mode: '0755'
 ### install starcraft
       - name: Install starcraft
         unarchive:
@@ -76,7 +76,7 @@
       - name: Download shortcut for starcraft
         get_url:
           url: http://10.200.11.2:/games/starcraft.desktop
-          dest: /home/test/Desktop/Games/
+          dest: /home/test/.local/share/applications/
           owner: test
           group: test         
           mode: '0555'
@@ -92,7 +92,7 @@
       - name: Download shortcut for cs
         get_url:
           url: http://10.200.11.2:/games/cs.desktop
-          dest: /home/test/Desktop/Games/
+          dest: /home/test/.local/share/applications/
           owner: test
           group: test
           mode: '0555'
