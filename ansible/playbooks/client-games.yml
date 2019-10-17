@@ -69,9 +69,9 @@
           group: test
           remote_src: yes
 
-#      - name: Install starcraft reg
-#        shell: wine start regedit.exe /home/test/.wine/drive_c/games/starcraft/starcraft.reg
-#        become_user: test
+      - name: Install starcraft reg
+        shell: wine start regedit.exe /home/test/.wine/drive_c/games/starcraft/starcraft.reg
+        become_user: test
 
       - name: Download shortcut for starcraft
         get_url:
@@ -96,11 +96,27 @@
           owner: test
           group: test
           mode: '0555'
+### install plantsvszombies
+      - name: Install plantsvszombies
+        unarchive:
+          src: http://10.200.11.2:/games/plantsvszombies.tar.gz
+          dest: /home/test/.wine/drive_c/games/
+          owner: test
+          group: test
+          remote_src: yes
+
+      - name: Download shortcut for plantsvszombies
+        get_url:
+          url: http://10.200.11.2:/games/plantsvszombies.desktop
+          dest: /home/test/.local/share/applications/
+          owner: test
+          group: test
+          mode: '0555'
 ### forbid test user to delete shortcuts
-      - name: Recursively change ownership of games shortcuts directory
-        file:
-          path: /home/test/Desktop/Games/
-          state: directory
-          recurse: yes
-          owner: root
-          group: root
+#      - name: Recursively change ownership of games shortcuts directory
+#        file:
+#          path: /home/test/Desktop/Games/
+#          state: directory
+#          recurse: yes
+#          owner: root
+#          group: root
