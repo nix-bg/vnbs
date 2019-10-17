@@ -71,6 +71,7 @@
 
       - name: Install starcraft reg
         shell: wine start regedit.exe /home/test/.wine/drive_c/games/starcraft/starcraft.reg
+        become: yes
         become_user: test
 
       - name: Download shortcut for starcraft
