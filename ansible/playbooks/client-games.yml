@@ -53,13 +53,13 @@
           group: test
           mode: '0755'
 
-#      - name: Create games shortcut directory on Desktop
-#        file:
-#          path: /home/test/Desktop/Games/
-#          state: directory
-#          owner: test
-#          group: test
-#          mode: '0755'
+      - name: Create games shortcut directory on Desktop
+        file:
+          path: /home/test/.local/share/applications/
+          state: directory
+          owner: test
+          group: test
+          mode: '0755'
 ### install starcraft
       - name: Install starcraft
         unarchive:
@@ -70,7 +70,7 @@
           remote_src: yes
 
       - name: Install starcraft reg
-        shell: wine regedit /home/test/.wine/drive_c/games/starcraft/starcraft.reg
+        shell: /usr/bin/regedit-development /home/test/.wine/drive_c/games/starcraft/starcraft.reg
         become: yes
         become_user: test
 
