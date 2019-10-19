@@ -74,12 +74,12 @@
         shell: /usr/bin/regedit-development /home/test/.wine/drive_c/games/starcraft/starcraft.reg
         become: yes
         become_user: test
-#workaround :P 
-      - name: Create symbolic link 
-        file:
-          src: "/home/test/.wine/drive_c/games/starcraft/RegSetup.exe"
-          dest: "/home/test/Desktop/RegSetup.exe"
-          state: link
+#workaround but not working :P 
+#      - name: Create symbolic link 
+#        file:
+#          src: "/home/test/.wine/drive_c/games/starcraft/RegSetup.exe"
+#          dest: "/home/test/Desktop/RegSetup.exe"
+#          state: link
       - name: Download shortcut for starcraft
         get_url:
           url: http://10.200.11.2:/games/starcraft.desktop
