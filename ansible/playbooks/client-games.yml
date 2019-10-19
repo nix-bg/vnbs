@@ -68,7 +68,7 @@
           owner: test
           group: test
           remote_src: yes
-
+#not working maybe wine team will fix it one day :P
       - name: Install starcraft reg
         shell: /usr/bin/regedit-development /home/test/.wine/drive_c/games/starcraft/starcraft.reg
         become: yes
