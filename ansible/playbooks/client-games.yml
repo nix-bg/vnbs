@@ -39,7 +39,8 @@
         'xplanet',
         'vlc',
         #system
-        'osspd-pulseaudio'
+        'osspd-pulseaudio',
+        'wine-development'
       ]
   - name: Install win games
     block:
