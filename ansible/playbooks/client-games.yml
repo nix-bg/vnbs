@@ -1,5 +1,5 @@
 - hosts: clients
-
+#TODO use variable instead of hardcode test
   tasks:
   - name: Install native games and apps
     apt:
@@ -48,9 +48,9 @@
 
   - name: Install skype
     shell: wget  https://go.skype.com/skypeforlinux-64.deb -O /tmp/skypeforlinux-64.deb && dpkg -i /tmp/skypeforlinux-64.deb
-
+#find better way to do it, also repo is hardcoded :(
   - name: Change wallpaper
-    shell: unlink /usr/share/xfce4/backdrops/xubuntu-wallpaper.png && cp /tmp/vnbs/wallpapers/desktop.png /usr/share/xfce4/backdrops/xubuntu-wallpaper.png
+    shell: cp -f /tmp/vnbs/wallpapers/desktop.png /usr/share/xfce4/backdrops/xubuntu-wallpaper.png
 
   - name: Install win games
     block:
