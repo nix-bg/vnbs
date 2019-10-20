@@ -49,6 +49,9 @@
   - name: Install skype
     shell: wget  https://go.skype.com/skypeforlinux-64.deb -O /tmp/skypeforlinux-64.deb && dpkg -i /tmp/skypeforlinux-64.deb
 
+  - name: Change wallpaper
+    shell: unlink /usr/share/xfce4/backdrops/xubuntu-wallpaper.png && cp /tmp/vnbs/wallpapers/desktop.png /usr/share/xfce4/backdrops/xubuntu-wallpaper.png
+
   - name: Install win games
     block:
 
@@ -134,10 +137,3 @@
 #          recurse: yes
 #          owner: root
 #          group: root
-#
-
-  - name: Set Wallpaper
-    gsettings:
-      schema: org.gnome.desktop.background
-      key: picture-uri
-      value: "/home/test/Pictures/wallpaper.jpg"
