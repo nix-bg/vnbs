@@ -50,7 +50,7 @@
     shell: wget  https://go.skype.com/skypeforlinux-64.deb -O /tmp/skypeforlinux-64.deb && dpkg -i /tmp/skypeforlinux-64.deb
 #find better way to do it, also repo is hardcoded :(
   - name: Change wallpaper
-    shell: cp -f /tmp/vnbs/wallpapers/desktop.png /usr/share/xfce4/backdrops/xubuntu-wallpaper.png
+    shell: "unlink /usr/share/xfce4/backdrops/xubuntu-wallpaper.png ; cp -f /tmp/vnbs/wallpapers/desktop.png /usr/share/xfce4/backdrops/xubuntu-wallpaper.png"
 
   - name: Install win games
     block:
