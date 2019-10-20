@@ -42,6 +42,13 @@
         'osspd-pulseaudio',
         'wine-development'
       ]
+
+  - name: Install viber
+    shell: wget http://download.cdn.viber.com/cdn/desktop/Linux/viber.deb -O /tmp/viber.deb && dpkg -i /tmp/viber.deb
+
+  - name: Install skype
+    shell: wget  https://go.skype.com/skypeforlinux-64.deb -O /tmp/skypeforlinux-64.deb && dpkg -i /tmp/skypeforlinux-64.deb
+
   - name: Install win games
     block:
 
