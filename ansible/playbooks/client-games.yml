@@ -44,10 +44,10 @@
       ]
 
   - name: Install viber
-    shell: wget http://download.cdn.viber.com/cdn/desktop/Linux/viber.deb -O /tmp/viber.deb && dpkg -i /tmp/viber.deb
+    shell: "wget -q http://download.cdn.viber.com/cdn/desktop/Linux/viber.deb -O /tmp/viber.deb && dpkg -i /tmp/viber.deb || apt-get install -fy && dpkg -i /tmp/viber.deb"
 
   - name: Install skype
-    shell: wget  https://go.skype.com/skypeforlinux-64.deb -O /tmp/skypeforlinux-64.deb && dpkg -i /tmp/skypeforlinux-64.deb
+    shell: "wget -q https://go.skype.com/skypeforlinux-64.deb -O /tmp/skypeforlinux-64.deb && dpkg -i /tmp/skypeforlinux-64.deb || apt-get install -fy && dpkg -i /tmp/skypeforlinux-64.deb"
 #find better way to do it, also repo is hardcoded :(
   - name: Change wallpaper
     shell: "unlink /usr/share/xfce4/backdrops/xubuntu-wallpaper.png ; cp -f /tmp/vnbs/wallpapers/desktop.png /usr/share/xfce4/backdrops/xubuntu-wallpaper.png"
